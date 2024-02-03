@@ -1,0 +1,4 @@
+vm_name,vm_resourceGroup,vm_size,vmOsDisk_type,vmOsDisk_size,vmDataDisks_type,vmDataDisks_size,adminId,adminPass,ImageName,ImageResourceGroup,AvailabilitySet,ProximityPlacementGroup
+sample-vm01,sample-rg,Standard_F2s_v2,Standard_LRS,128,,,vmadmin,#password123,,,sample-as01,sample-ppg01
+sample-vm02,sample-rg,Standard_B1s,Standard_LRS,32,StandardSSD_LRS;Standard_LRS,32;32,vmadmin,#password123,,,sample-as02,
+sample-vm03,sample-rg,Standard_F2s_v2,Standard_LRS,64,StandardSSD_LRS,64,vmadmin,#password123,win2019-image,sample-rg,,
