@@ -1,0 +1,5 @@
+﻿routeTableName,rtResourceGroup,routeName,routeAddress,nexthopType,nexthopIp
+route01,sample-rg,default,0.0.0.0/0,VirtualAppliance,192.168.0.132
+route02,sample-rg,to-Internet,8.8.8.8/32,Internet,
+route03,sample-rg,to-Onpre,10.10.10.0/24,VirtualNetworkGateway,
+route03,sample-rg,to-Vnet,10.0.0.0/24,VnetLocal,

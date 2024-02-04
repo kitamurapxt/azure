@@ -2,7 +2,7 @@ function add_NSG {
     foreach ($line in $nw_csv) {
         $location = $line.location
         $nsgNames = $line.NSG_names.Split(";")
-        $nsgResourceGroup = $line.NSG_resourceGroups.Split(";")
+        $nsg_rg = $line.vNet_resourceGroup
         <#
             .SYNOPSIS
             Deploy New NSG.
@@ -17,11 +17,9 @@ function add_NSG {
             NONE. This function is called in "deploy_AzVm.ps1
         #>
 
-        $nsg_num = 0
         foreach ($nsgName in $nsgNames) {
             if(!($nsgName)){ break }
-            $nsg_rg = $nsgResourceGroup[$nsg_num]
-
+            
             $nsg = Get-AzNetworkSecurityGroup -Name $nsgName -resourceGroup $nsg_rg -ErrorAction SilentlyContinue
             if (!($nsg)) {
                 # Function call. Create resource group if it does not exist.
@@ -43,7 +41,7 @@ function add_NSG {
                 } else {
                     Write-Host -Object "| NSG [ ${nsgName}] already exists." -ForegroundColor "Yellow"
                 }
-            $nsg_num ++ ; Start-Sleep 1
+            Start-Sleep 1
             Write-Host -Object "| - - - - -"
         }
     }
