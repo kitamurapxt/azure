@@ -1,0 +1,3 @@
+﻿storageName,storageResourceGroup,location,sku,bootdiag_vmNames,vmResourceGroups,flowlog_nsgs,nsgResourceGroups,RetentionInDays
+sample001vmboot,sample-rg,japaneast,Standard_LRS,sample-vm01;sample-vm02,sample-rg;sample-rg,,,
+sample001nsglog,sample-rg,japaneast,Standard_LRS,,,nsg01;nsg02;nsg03,sample-rg;sample-rg;sample-rg,30;60;90

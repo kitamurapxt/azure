@@ -1,0 +1,1 @@
+vm_name,vm_resourceGroup,vm_size,vmOsDisk_type,vmOsDisk_size,vmDataDisks_type,vmDataDisks_size,adminId,adminPass,ImageName,ImageResourceGroup,AvailabilitySet,ProximityPlacementGroup

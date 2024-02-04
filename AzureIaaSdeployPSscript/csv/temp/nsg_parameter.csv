@@ -1,0 +1,1 @@
+﻿nsgName,nsgResourceGroup,ruleName,access,protocol,direction,priority,sourceAddresses,sourcePorts,destAddresses,destPorts,description

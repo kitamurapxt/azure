@@ -1,0 +1,3 @@
+﻿ResourceName,ResourceGroup,TagName,TagValue
+sample-vm01,sample-rg,CostCenter,1
+sample-vm02,sample-rg,CostCenter,2
