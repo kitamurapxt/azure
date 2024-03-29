@@ -1,0 +1,691 @@
+﻿**********************
+Windows PowerShell トランスクリプト開始
+開始時刻: 20240322165612
+ユーザー名: D-080222\kitamura
+RunAs ユーザー: D-080222\kitamura
+構成名: 
+コンピューター: D-080222 (Microsoft Windows NT 10.0.22621.0)
+ホスト アプリケーション: C:\windows\System32\WindowsPowerShell\v1.0\powershell.exe
+プロセス ID: 15036
+PSVersion: 5.1.22621.2506
+PSEdition: Desktop
+PSCompatibleVersions: 1.0, 2.0, 3.0, 4.0, 5.0, 5.1.22621.2506
+BuildVersion: 10.0.22621.2506
+CLRVersion: 4.0.30319.42000
+WSManStackVersion: 3.0
+PSRemotingProtocolVersion: 2.3
+SerializationVersion: 1.1.0.1
+**********************
+トランスクリプトが開始されました。出力ファイル: .\log\2024-03-22_1656.log
+|
+| - - - - - - - - - - - - - -
+|
+ Subscription:
+Azure サブスクリプション 1 (3b2af730-85f0-4344-98cb-e075b01533d5) - 4d15abd0-59be-437c-bc6a-7313c6019b56 - h21kitamura@dai3.tokyo
+|
+|
+|
+| - - - - - - - - - - - - - -
+| Check for the existence of Az modules.
+| - - - - - - - - - - - - - -
+Az.Accounts
+Az.Resources
+Az.Network
+Az.Compute
+Az.Storage
+Az.RecoveryServices
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  VirtualNetwork
+| - - - - - - - - - - - - - -
+.\csv\nw_parameter.csv
+
+vNet_name      vNet_resourceGroup location  ranges
+---------      ------------------ --------  ------
+sample-vnet192 sample-rg          japaneast 192.168.0.0/24;192.168.255.0/24
+sample-vnet192 sample-rg          japaneast 192.168.0.0/24;192.168.255.0/24
+sample-vnet172 sample-rg          japaneast 172.16.0.0/24
+sample-vnet10  sample-rg          japaneast 10.0.0.0/24
+
+
+|
+警告: モジュール 'Microsoft.Azure.PowerShell.Cmdlets.Network' からインポートされたコマンドの中には、名前に承認されていない動詞を含むものがあり、このようなコマンドは検出される可能性が低くなる場合があります。承認されていない動詞を含むコマンドを見つけるには、Verbose パラメーターを使用してもう一度 Import-Module コマンドを実行してください。承認されている動詞の一覧を表示するには、「Get-Verb」と入力してください。
+情報: Loaded Module 'Az.Authorization'
+情報: Loaded Module 'Az.Accounts'
+情報: Loaded Module 'Az.MSGraph'
+| RESOURCEGROUP [ sample-rg ] deploying...
+|
+| RESOURCEGROUP_ID:
+|  /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg
+| - - - - -
+|
+| Azure_Virtual_Network [ sample-vnet192 ]
+|
+| VNET [ sample-vnet192 ] deploying...
+|
+| VNET_ID:
+|  /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet192
+| - - - - -
+| VNET [ sample-vnet192 ] already exists.
+| - - - - -
+|
+| Azure_Virtual_Network [ sample-vnet172 ]
+|
+| VNET [ sample-vnet172 ] deploying...
+|
+| VNET_ID:
+|  /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet172
+| - - - - -
+|
+| Azure_Virtual_Network [ sample-vnet10 ]
+|
+| VNET [ sample-vnet10 ] deploying...
+|
+| VNET_ID:
+|  /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet10
+| - - - - -
+| function add_VirtualNetwork completed.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  NSG
+| - - - - - - - - - - - - - -
+
+NSG_names         subnetNames                   vNet_name
+---------         -----------                   ---------
+nsg01;nsg02       192-168-0-0;192-168-0-128     sample-vnet192
+                  192-168-255-0                 sample-vnet192
+nsg03             172-16-0-0                    sample-vnet172
+nsg01;nsg02;nsg03 10-0-0-0;10-0-0-64;10-0-0-128 sample-vnet10
+
+
+|
+|
+| Azure_Network_Security_Group [ nsg01 ]
+|
+| NSG [ nsg01] deploying...
+|
+| NSG_ID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/networkSecurityGroups/nsg01
+| - - - - -
+|
+| Azure_Network_Security_Group [ nsg02 ]
+|
+| NSG [ nsg02] deploying...
+|
+| NSG_ID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/networkSecurityGroups/nsg02
+| - - - - -
+|
+| Azure_Network_Security_Group [ nsg03 ]
+|
+| NSG [ nsg03] deploying...
+|
+| NSG_ID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/networkSecurityGroups/nsg03
+| - - - - -
+| NSG [ nsg01] already exists.
+| - - - - -
+| NSG [ nsg02] already exists.
+| - - - - -
+| NSG [ nsg03] already exists.
+| - - - - -
+| function add_NSG completed.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  NsgRule
+| - - - - - - - - - - - - - -
+.\csv\nsg_parameter.csv
+
+nsgName ruleName                access direction sourceAddresses                          destAddresses                          destPorts
+------- --------                ------ --------- ---------------                          -------------                          ---------
+nsg01   AllowALL.subnet-in      Allow  inbound   192.168.0.0/24;172.16.0.0/24;10.0.0.0/24 VirtualNetwork                         *
+nsg01   AllowALL.ALB-in         Allow  inbound   AzureLoadBalancer                        *                                      *
+nsg01   DenyALL-in              Deny   inbound   *                                        *                                      *
+nsg01   AllowALL.subnet-out     Allow  outbound  192.168.0.0/24;172.16.0.0/24;10.0.0.0/24 VirtualNetwork                         *
+nsg01   DenyALL-out             Deny   outbound  *                                        *                                      *
+nsg02   Allow53.google-out      Allow  outbound  VirtualNetwork                           8.8.8.8                                53
+nsg02   DenyALL.Internet-out    Deny   outbound  VirtualNetwork                           Internet                               *
+nsg03   Allow80_443.internet-in Allow  inbound   Internet                                 10.0.0.0/26;10.0.0.64/26;10.0.0.128/26 80;443
+nsg03   AllowALL.ALB-in         Allow  inbound   AzureLoadBalancer                        *                                      *
+nsg03   DenyALL-in              Deny   inbound   *                                        *                                      *
+nsg03   AllowALL.subnet-out     Allow  outbound  192.168.0.0/24;172.16.0.0/24;10.0.0.0/24 10.0.0.0/26;10.0.0.64/26;10.0.0.128/26 *
+nsg03   DenyALL-out             Deny   outbound  *                                        *                                      *
+
+
+|
+|
+| Azure_Network_Security_Group [ nsg01 ]
+| Rule [ AllowALL.subnet-in ]:
+
+|
+|
+| Azure_Network_Security_Group [ nsg01 ]
+| Rule [ AllowALL.ALB-in ]:
+
+Name                     : AllowALL.subnet-in
+Direction                : Inbound
+Access                   : Allow
+Priority                 : 1000
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {192.168.0.0/24, 172.16.0.0/24, 10.0.0.0/24}
+DestinationAddressPrefix : {VirtualNetwork}
+
+Name                     : AllowALL.ALB-in
+Direction                : Inbound
+Access                   : Allow
+Priority                 : 2000
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {AzureLoadBalancer}
+DestinationAddressPrefix : {*}
+
+|
+|
+| Azure_Network_Security_Group [ nsg01 ]
+| Rule [ DenyALL-in ]:
+Name                     : DenyALL-in
+Direction                : Inbound
+Access                   : Deny
+Priority                 : 4096
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {*}
+DestinationAddressPrefix : {*}
+
+|
+|
+| Azure_Network_Security_Group [ nsg01 ]
+| Rule [ AllowALL.subnet-out ]:
+Name                     : AllowALL.subnet-out
+Direction                : Outbound
+Access                   : Allow
+Priority                 : 1000
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {192.168.0.0/24, 172.16.0.0/24, 10.0.0.0/24}
+DestinationAddressPrefix : {VirtualNetwork}
+
+|
+|
+| Azure_Network_Security_Group [ nsg01 ]
+| Rule [ DenyALL-out ]:
+Name                     : DenyALL-out
+Direction                : Outbound
+Access                   : Deny
+Priority                 : 4096
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {*}
+DestinationAddressPrefix : {*}
+
+|
+|
+| Azure_Network_Security_Group [ nsg02 ]
+| Rule [ Allow53.google-out ]:
+Name                     : Allow53.google-out
+Direction                : Outbound
+Access                   : Allow
+Priority                 : 1000
+Protocol                 : UDP
+DestinationPortRange     : {53}
+SourceAddressPrefix      : {VirtualNetwork}
+DestinationAddressPrefix : {8.8.8.8}
+
+|
+|
+| Azure_Network_Security_Group [ nsg02 ]
+| Rule [ DenyALL.Internet-out ]:
+Name                     : DenyALL.Internet-out
+Direction                : Outbound
+Access                   : Deny
+Priority                 : 4000
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {VirtualNetwork}
+DestinationAddressPrefix : {Internet}
+
+|
+|
+| Azure_Network_Security_Group [ nsg03 ]
+| Rule [ Allow80_443.internet-in ]:
+Name                     : Allow80_443.internet-in
+Direction                : Inbound
+Access                   : Allow
+Priority                 : 1000
+Protocol                 : TCP
+DestinationPortRange     : {80, 443}
+SourceAddressPrefix      : {Internet}
+DestinationAddressPrefix : {10.0.0.0/26, 10.0.0.64/26, 10.0.0.128/26}
+
+|
+|
+| Azure_Network_Security_Group [ nsg03 ]
+| Rule [ AllowALL.ALB-in ]:
+Name                     : AllowALL.ALB-in
+Direction                : Inbound
+Access                   : Allow
+Priority                 : 2000
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {AzureLoadBalancer}
+DestinationAddressPrefix : {*}
+
+|
+|
+| Azure_Network_Security_Group [ nsg03 ]
+| Rule [ DenyALL-in ]:
+Name                     : DenyALL-in
+Direction                : Inbound
+Access                   : Deny
+Priority                 : 4096
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {*}
+DestinationAddressPrefix : {*}
+
+|
+|
+| Azure_Network_Security_Group [ nsg03 ]
+| Rule [ AllowALL.subnet-out ]:
+Name                     : AllowALL.subnet-out
+Direction                : Outbound
+Access                   : Allow
+Priority                 : 1000
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {192.168.0.0/24, 172.16.0.0/24, 10.0.0.0/24}
+DestinationAddressPrefix : {10.0.0.0/26, 10.0.0.64/26, 10.0.0.128/26}
+
+|
+|
+| Azure_Network_Security_Group [ nsg03 ]
+| Rule [ DenyALL-out ]:
+Name                     : DenyALL-out
+Direction                : Outbound
+Access                   : Deny
+Priority                 : 4096
+Protocol                 : *
+DestinationPortRange     : {*}
+SourceAddressPrefix      : {*}
+DestinationAddressPrefix : {*}
+
+|
+| function add_NetworkSecurityRule completed.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  RouteTable
+| - - - - - - - - - - - - - -
+
+
+
+RouteTable_names        subnetNames                   vNet_name
+----------------        -----------                   ---------
+route01;route02         192-168-0-0;192-168-0-128     sample-vnet192
+route03                 192-168-255-0                 sample-vnet192
+                        172-16-0-0                    sample-vnet172
+route01;route02;route03 10-0-0-0;10-0-0-64;10-0-0-128 sample-vnet10
+
+
+|
+|
+| Azure_Route_Table [ route01 ]
+|
+| RouteTable [ route01] deploying...
+|
+| RouteTable_ID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/routeTables/route01
+| - - - - -
+|
+| Azure_Route_Table [ route02 ]
+|
+| RouteTable [ route02] deploying...
+|
+| RouteTable_ID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/routeTables/route02
+| - - - - -
+|
+| Azure_Route_Table [ route03 ]
+|
+| RouteTable [ route03] deploying...
+|
+| RouteTable_ID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/routeTables/route03
+| - - - - -
+| RouteTable [ route01] already exists.
+| - - - - -
+| RouteTable [ route02] already exists.
+| - - - - -
+| RouteTable [ route03] already exists.
+| - - - - -
+| function add_RouteTable completed.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  RouteConfig
+| - - - - - - - - - - - - - -
+
+routeTableName rtResourceGroup routeName   routeAddress  nexthopType           nexthopIp
+-------------- --------------- ---------   ------------  -----------           ---------
+route01        sample-rg       default     0.0.0.0/0     VirtualAppliance      192.168.0.132
+route02        sample-rg       to-Internet 8.8.8.8/32    Internet
+route03        sample-rg       to-Onpre    10.10.10.0/24 VirtualNetworkGateway
+route03        sample-rg       to-Vnet     10.0.0.0/24   VnetLocal
+
+
+|
+|
+| Azure_Network_Route_Table [ route01 ]
+
+| Route [ default ]:
+|
+|
+| Azure_Network_Route_Table [ route02 ]
+ResourceGroupName Name    Location  ProvisioningState DisableBgpRoutePropagation
+----------------- ----    --------  ----------------- --------------------------
+sample-rg         route01 japaneast Succeeded         False
+
+AddressPrefix     : 0.0.0.0/0
+NextHopType       : VirtualAppliance
+NextHopIpAddress  : 192.168.0.132
+ProvisioningState : Succeeded
+Name              : default
+Etag              : W/"962c2c0a-a508-42dc-ba80-829dbe6302d8"
+Id                : /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/routeTables/route01/routes/def
+                    ault
+
+sample-rg         route02 japaneast Succeeded         False
+| Route [ to-Internet ]:
+
+AddressPrefix     : 8.8.8.8/32
+NextHopType       : Internet
+NextHopIpAddress  :
+ProvisioningState : Succeeded
+Name              : to-Internet
+Etag              : W/"06d22a80-43e2-44df-9abb-78b3a8d11b4e"
+Id                : /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/routeTables/route02/routes/to-
+                    Internet
+
+|
+|
+| Azure_Network_Route_Table [ route03 ]
+sample-rg         route03 japaneast Succeeded         False
+| Route [ to-Onpre ]:
+
+AddressPrefix     : 10.10.10.0/24
+NextHopType       : VirtualNetworkGateway
+NextHopIpAddress  :
+ProvisioningState : Succeeded
+Name              : to-Onpre
+Etag              : W/"8cbcdce1-40f0-4fcd-84c0-d88994587693"
+Id                : /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/routeTables/route03/routes/to-
+                    Onpre
+
+|
+|
+| Azure_Network_Route_Table [ route03 ]
+sample-rg         route03 japaneast Succeeded         False
+| Route [ to-Vnet ]:
+
+AddressPrefix     : 10.0.0.0/24
+NextHopType       : VnetLocal
+NextHopIpAddress  :
+ProvisioningState : Succeeded
+Name              : to-Vnet
+Etag              : W/"d8975eac-873c-44f0-ae6e-fff7a0dbc99e"
+Id                : /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/routeTables/route03/routes/to-
+                    Vnet
+
+|
+| function add_RouteConfig completed.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  Subnet
+| - - - - - - - - - - - - - -
+
+
+
+vNet_name      subnetNames                   subnetRanges                           NSG_names         RouteTable_names
+---------      -----------                   ------------                           ---------         ----------------
+sample-vnet192 192-168-0-0;192-168-0-128     192.168.0.0/25;192.168.0.128/25        nsg01;nsg02       route01;route02
+sample-vnet192 192-168-255-0                 192.168.255.0/25                                         route03
+sample-vnet172 172-16-0-0                    172.16.0.0/24                          nsg03
+sample-vnet10  10-0-0-0;10-0-0-64;10-0-0-128 10.0.0.0/26;10.0.0.64/26;10.0.0.128/26 nsg01;nsg02;nsg03 route01;route02;route03
+
+
+|
+| Azure_Virtual_Network_Subnet [ 192-168-0-0 ]
+|
+| SUBNET [ 192-168-0-0 ] deploying...
+| SUBNET ResourceID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet192/subnets/192-168-0-0
+|
+| Azure_Virtual_Network_Subnet [ 192-168-0-128 ]
+|
+| SUBNET [ 192-168-0-128 ] deploying...
+| SUBNET ResourceID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet192/subnets/192-168-0-128
+|
+| - - - - -
+| Azure_Virtual_Network_Subnet [ 192-168-255-0 ]
+|
+| SUBNET [ 192-168-255-0 ] deploying...
+| SUBNET ResourceID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet192/subnets/192-168-255-0
+|
+| - - - - -
+| Azure_Virtual_Network_Subnet [ 172-16-0-0 ]
+|
+| SUBNET [ 172-16-0-0 ] deploying...
+| SUBNET ResourceID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet172/subnets/172-16-0-0
+|
+| - - - - -
+| Azure_Virtual_Network_Subnet [ 10-0-0-0 ]
+|
+| SUBNET [ 10-0-0-0 ] deploying...
+| SUBNET ResourceID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet10/subnets/10-0-0-0
+|
+| Azure_Virtual_Network_Subnet [ 10-0-0-64 ]
+|
+| SUBNET [ 10-0-0-64 ] deploying...
+| SUBNET ResourceID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet10/subnets/10-0-0-64
+|
+| Azure_Virtual_Network_Subnet [ 10-0-0-128 ]
+|
+| SUBNET [ 10-0-0-128 ] deploying...
+| SUBNET ResourceID:
+| /subscriptions/3b2af730-85f0-4344-98cb-e075b01533d5/resourceGroups/sample-rg/providers/Microsoft.Network/virtualNetworks/sample-vnet10/subnets/10-0-0-128
+|
+| - - - - -
+| function add_Subnet completed.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  vNet Peering
+| - - - - - - - - - - - - - -
+
+vNet_name      vNet_resourceGroup Peer_vNets                   Peer_vNetRgs
+---------      ------------------ ----------                   ------------
+sample-vnet192 sample-rg
+sample-vnet192 sample-rg          sample-vnet172;sample-vnet10 sample-rg;sample-rg
+sample-vnet172 sample-rg          sample-vnet192               sample-rg
+sample-vnet10  sample-rg          sample-vnet192               sample-rg
+
+
+|
+. : 用語 'add_vNetPeering' は、コマンドレット、関数、スクリプト ファイル、または操作可能なプログラムの名前として認識されません。名前が正しく記述されていることを確認し、パスが含まれている場合はそのパスが正しいことを確
+認してから、再試行してください。
+発生場所 C:\Users\kitamura\Documents\vscode\azure\AzureIaaSdeployPSscript\func\Confirm_YesNo.ps1:26 文字:20
++         0 { "|"; . $command; break}
++                    ~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (add_vNetPeering:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+. : 用語 'add_vNetPeering' は、コマンドレット、関数、スクリプト ファイル、または操作可能なプログラムの名前として認識されません。名前が正しく記述されている
+ことを確認し、パスが含まれている場合はそのパスが正しいことを確認してから、再試行してください。
+発生場所 C:\Users\kitamura\Documents\vscode\azure\AzureIaaSdeployPSscript\func\Confirm_YesNo.ps1:26 文字:20
++         0 { "|"; . $command; break}
++                    ~~~~~~~~
+    + CategoryInfo          : ObjectNotFound: (add_vNetPeering:String) [], CommandNotFoundException
+    + FullyQualifiedErrorId : CommandNotFoundException
+
+|
+|
+| - - - - - - - - - - - - - -
+|  VM_NIC
+| - - - - - - - - - - - - - -
+.\csv\vm_network.csv
+
+vm_name     ipAddress     vNet_name      subnetNames
+-------     ---------     ---------      -----------
+sample-vm01 172.16.0.11   sample-vnet172 172-16-0-0
+sample-vm02 172.16.0.12   sample-vnet172 172-16-0-0
+sample-vm03 10.0.0.13     sample-vnet10  10-0-0-0
+sample-vm04 10.0.0.14     sample-vnet10  10-0-0-0
+sample-vm05 192.168.0.135 sample-vnet192 192-168-0-128
+
+
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  AvailabilitySet
+| - - - - - - - - - - - - - -
+.\csv\availability_parameter.csv
+
+AvailabilitySet vm_resourceGroup Location  UpdateDomain FaultDomain ProximityPlacementGroup
+--------------- ---------------- --------  ------------ ----------- -----------------------
+sample-as01     sample-rg        japaneast 5            2           sample-ppg01
+sample-as02     sample-rg        japaneast 3            2
+
+
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  VM
+| - - - - - - - - - - - - - -
+.\csv\vm_parameter.csv
+
+vm_name     vm_resourceGroup vm_size         vmOsDisk_size ImageName
+-------     ---------------- -------         ------------- ---------
+sample-vm01 sample-rg        Standard_F2s_v2 128
+sample-vm02 sample-rg        Standard_F2s_v2 128
+sample-vm03 sample-rg        Standard_B1s    64
+sample-vm04 sample-rg        Standard_B1s    64
+sample-vm05 sample-rg        Standard_B1s    64            win2019-image
+
+
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  StorageAccount
+| - - - - - - - - - - - - - -
+.\csv\storage_parameter.csv
+
+storageName     storageResourceGroup bootdiag_vmNames        flowlog_nsgs
+-----------     -------------------- ----------------        ------------
+sample001vmboot sample-rg            sample-vm01;sample-vm02
+sample001nsglog sample-rg                                    nsg01;nsg02;nsg03
+
+
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  RecoveryServicesVault
+| - - - - - - - - - - - - - -
+.\csv\backup_parameter.csv
+
+vmName      vmRg      RecoveryServicesName RecoveryServicesRg
+------      ----      -------------------- ------------------
+sample-vm01 sample-rg rsc01                sample-rg
+sample-vm02 sample-rg rsc02                sample-rg
+
+
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  BackupPolicy
+| - - - - - - - - - - - - - -
+.\csv\backup_parameter.csv
+
+RecoveryServicesName policyName   scheduleRunFrequency Redundancy
+-------------------- ----------   -------------------- ----------
+rsc01                WeeklyPolicy Weekly               locallyredundant
+rsc02                DailyPolicy  Daily                locallyredundant
+
+
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  EnableBackupProtection
+| - - - - - - - - - - - - - -
+.\csv\backup_parameter.csv
+
+vmName      RecoveryServicesName policyName
+------      -------------------- ----------
+sample-vm01 rsc01                WeeklyPolicy
+sample-vm02 rsc02                DailyPolicy
+
+
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+|  Tag
+| - - - - - - - - - - - - - -
+.\csv\tag_parameter.csv
+
+ResourceName ResourceGroup TagName    TagValue
+------------ ------------- -------    --------
+sample-vm01  sample-rg     CostCenter 1
+sample-vm02  sample-rg     CostCenter 2
+
+
+|
+| Canceled.
+|
+|
+|
+| - - - - - - - - - - - - - -
+| deploy_AzVm.ps1 Complete.
+| - - - - - - - - - - - - - -
+|
+**********************
+Windows PowerShell トランスクリプト終了
+終了時刻: 20240322170732
+**********************

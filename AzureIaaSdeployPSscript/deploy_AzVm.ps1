@@ -13,6 +13,7 @@
 #>
 # csv parameter Files path
 $vm_paramFile = ".\csv\vm_parameter.csv"
+$vmnw_paramFile = ".\csv\vm_network.csv"
 $nw_paramFile = ".\csv\nw_parameter.csv"
 $nsg_paramFile = ".\csv\nsg_parameter.csv"    
 $route_paramFile = ".\csv\route_parameter.csv"    
@@ -52,6 +53,7 @@ try {
     . .\func\Confirm_YesNo.ps1
     . .\func\add_ResourceGroup.ps1
     . .\func\add_VirtualNetwork.ps1
+    . .\func\add_vNetPeering.ps1
     . .\func\add_NSG.ps1
     . .\func\add_RouteTable.ps1
     . .\func\add_RouteCOnfig.ps1
@@ -83,6 +85,7 @@ Confirm_YesNo check_Cmdlt
 # Load CSVs
 try {
     Test-Path -Path $vm_paramFile | Out-Null
+    Test-Path -Path $vmnw_paramFile | Out-Null
     Test-Path -Path $nw_paramFile | Out-Null
     Test-Path -Path $nsg_paramFile | Out-Null
     Test-Path -Path $route_paramFile | Out-Null
@@ -155,10 +158,19 @@ Confirm_YesNo add_Subnet
 Write-Host -Object "|"
 Write-Host -Object "|"
 Write-Host -Object "| - - - - - - - - - - - - - -"
+Write-Host -Object "|  vNet Peering"
+Write-Host -Object "| - - - - - - - - - - - - - -"
+$nw_csv | select-Object vNet_name,vNet_resourceGroup,Peer_vNets,Peer_vNetRgs | format-table
+Confirm_YesNo add_vNetPeering
+
+Write-Host -Object "|"
+Write-Host -Object "|"
+Write-Host -Object "| - - - - - - - - - - - - - -"
 Write-Host -Object "|  VM_NIC"
 Write-Host -Object "| - - - - - - - - - - - - - -"
-$nw_paramFile
-$nw_csv | select-Object vm_name,ipAddress,vNet_name,subnetNames | format-table 
+$vmnw_paramFile
+$vmnw_csv = Import-Csv -Path $vmnw_paramFile
+$vmnw_csv | select-Object vm_name,ipAddress,vNet_name,subnetNames | format-table 
 Confirm_YesNo add_NetworkInterface
 
 Write-Host -Object "|"

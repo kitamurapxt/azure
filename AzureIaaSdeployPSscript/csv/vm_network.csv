@@ -1,0 +1,6 @@
+vm_name,vm_resourceGroup,ipAddress,vNet_name,vNet_resourceGroup,subnetNames,AvailabilitySet,ProximityPlacementGroup
+sample-vm01,sample-rg,172.16.0.11,sample-vnet172,sample-rg,172-16-0-0,sample-as01,sample-ppg01
+sample-vm02,sample-rg,172.16.0.12,sample-vnet172,sample-rg,172-16-0-0,sample-as01,sample-ppg01
+sample-vm03,sample-rg,10.0.0.13,sample-vnet10,sample-rg,10-0-0-0,sample-as02,
+sample-vm04,sample-rg,10.0.0.14,sample-vnet10,sample-rg,10-0-0-0,sample-as02,
+sample-vm05,sample-rg,192.168.0.135,sample-vnet192,sample-rg,192-168-0-128,,
