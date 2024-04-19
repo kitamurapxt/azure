@@ -22,10 +22,10 @@ function check_cmdlt {
         $bln = $cmdlt_all.Contains($line)
         if ($bln) {
             # true
-            Write-Host "| -- PASS --  Module [ ${line} ]  installed." -ForegroundColor Green
+            Write-Host "| Module [ ${line} ]  installed." -ForegroundColor Green
         } else {
             # false
-            Write-Host "| -- ERROR --  Module [ ${line} ] not installed." -ForegroundColor Red
+            Write-Host "| Module [ ${line} ] not installed." -ForegroundColor Red
             Write-Host "| Az command must be installed for this script to work." -ForegroundColor Red
             exit
         }

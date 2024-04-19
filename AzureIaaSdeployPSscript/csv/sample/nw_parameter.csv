@@ -1,5 +1,5 @@
-﻿vm_name,vm_resourceGroup,ipAddress,vNet_name,vNet_resourceGroup,location,ranges,subnetNames,subnetRanges,NSG_names,RouteTable_names
-sample-vm01,sample-rg,192.168.0.11,sample-vnet192,sample-rg,japaneast,192.168.0.0/24;192.168.255.0/24,192-168-0-0;192-168-0-128,192.168.0.0/25;192.168.0.128/25,nsg01;nsg02,route01;route02
-,,,sample-vnet192,sample-rg,japaneast,192.168.0.0/24;192.168.255.0/24,192-168-255-0,192.168.255.0/24,nsg03,route03
-sample-vm02,sample-rg,172.16.0.12,sample-vnet172,sample-rg,japaneast,172.16.0.0/24,172-16-0-0,172.16.0.0/24,nsg01,route01;route02
-sample-vm03,sample-rg,10.0.0.13,sample-vnet10,sample-rg,japaneast,10.0.0.0/24,10-0-0-0;10-0-0-64;10-0-0-128,10.0.0.0/26;10.0.0.64/26;10.0.0.128/26,nsg01;nsg02;nsg03,route01;route02;route03
+﻿vNet_name,vNet_resourceGroup,location,ranges,subnetNames,subnetRanges,NSG_names,RouteTable_names,Peer_vNets,Peer_vNetRgs
+sample-vnet192,sample-rg,japaneast,192.168.0.0/24;192.168.255.0/24,192-168-0-0;192-168-0-128,192.168.0.0/25;192.168.0.128/25,nsg01;nsg02,route01;route02,,
+sample-vnet192,sample-rg,japaneast,192.168.0.0/24;192.168.255.0/24,192-168-255-0,192.168.255.0/25,,route03,sample-vnet172;sample-vnet10,sample-rg;sample-rg
+sample-vnet172,sample-rg,japaneast,172.16.0.0/24,172-16-0-0,172.16.0.0/24,nsg03,,sample-vnet192,sample-rg
+sample-vnet10,sample-rg,japaneast,10.0.0.0/24,10-0-0-0;10-0-0-64;10-0-0-128,10.0.0.0/26;10.0.0.64/26;10.0.0.128/26,nsg01;nsg02;nsg03,route01;route02;route03,sample-vnet192,sample-rg
