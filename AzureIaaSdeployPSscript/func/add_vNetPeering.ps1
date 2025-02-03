@@ -27,23 +27,28 @@ function add_vNetPeering {
                 Write-Host -Object "|"
                 $fromvNet = Get-AzVirtualNetwork -Name $vnetName -ResourceGroup $vnetResourceGroup -ErrorAction SilentlyContinue
                 $PeervNet = Get-AzVirtualNetwork -Name $PeervNetName -ResourceGroup $PeervNetRgs[$vnet_num] -ErrorAction SilentlyContinue
+                if (!($fromvNet)) {
+                    Write-Host -Object "| FROMVNET [ ${$fromvNet} ] not found." -ForegroundColor "Yellow" ; break
+                }
                 if (!($PeervNet)) {
-                    Write-Host -Object "| PEERVNET [ ${$PeervNet} ] not found." -ForegroundColor "Yellow" #; break
+                    Write-Host -Object "| PEERVNET [ ${$PeervNet} ] not found." -ForegroundColor "Yellow" ; break
                 } else {
-
                     $PeerName = $vnetName +"---"+ $PeervNetName
-                    Write-Host -Object "| PEERING [ ${PeerName} ] deploying... "
-                    
-                    Add-AzVirtualNetworkPeering -Name $PeerName -VirtualNetwork $fromvNet -RemoteVirtualNetworkId $PeervNet.Id -AsJob
-                    Get-Job | Wait-Job | Out-Null
-                    if (Get-Job -State Failed) {
-                        Write-Host -Object "| -- Error -- some jobs failed as follows:" -ForegroundColor "Red" ; (Get-Job -State Failed).Error 
+                    if (!(Get-AzVirtualNetworkPeering -VirtualNetworkName $fromvNet.name -ResourceGroupName $vnetResourceGroup -Name $PeerName -ErrorAction SilentlyContinue)) {
+                        Write-Host -Object "| PEERING [ ${PeerName} ] deploying... "
+                        Add-AzVirtualNetworkPeering -Name $PeerName -VirtualNetwork $fromvNet -RemoteVirtualNetworkId $PeervNet.Id -AsJob
+                        Get-Job | Wait-Job | Out-Null
+                        if (Get-Job -State Failed) {
+                            Write-Host -Object "| -- Error -- some jobs failed as follows:" -ForegroundColor "Red" ; (Get-Job -State Failed).Error 
+                            Get-Job | Remove-Job | Out-Null
+                            Write-Host -Object "|" ; break
+                        }
                         Get-Job | Remove-Job | Out-Null
-                        Write-Host -Object "|" ; break
+                        Write-Host -Object "| VNET PEERING [ ${PeerName} ] connected."
+                        Write-Host -Object "|"
+                    } else {
+                        Write-Host -Object "| VNET PEERING [ ${PeerName} ] already exists." -ForegroundColor "Yellow"
                     }
-                    Get-Job | Remove-Job | Out-Null
-                    Write-Host -Object "| VNET PEERING [ ${PeerName} ] connected."
-                    Write-Host -Object "|" 
                 }
                 Write-Host -Object "| - - - - -"
                 $vnet_num ++ ; Start-Sleep 1

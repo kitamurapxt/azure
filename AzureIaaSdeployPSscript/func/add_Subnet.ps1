@@ -30,15 +30,15 @@ function add_Subnet {
                 Write-Host -Object "| Azure_Virtual_Network_Subnet [ $subnetName ]"
                 Write-Host -Object "|"
                 Write-Host -Object "| SUBNET [ ${subnetName} ] deploying... "
-                
+
                 if (($nsgNames) -And ($rtNames)) {
                     $nsg = Get-AzNetworkSecurityGroup -Name $nsgNames[$subnet_num] -resourceGroup $nsgResourceGroup -ErrorAction SilentlyContinue
                     $routeTable = Get-AzRouteTable -Name $rtNames[$subnet_num] -resourceGroup $rtResourceGroup -ErrorAction SilentlyContinue
                     if (($nsg) -And ($routeTable)) {
                         Add-AzVirtualNetworkSubnetConfig -Name $subnetName -VirtualNetwork $vnet `
                         -AddressPrefix $subnetRanges[$subnet_num] -NetworkSecurityGroupId $nsg.Id `
-                        -RouteTableId $routeTable.Id | set-AzVirtualNetwork -AsJob | Out-Null    
-                    } 
+                        -RouteTableId $routeTable.Id | set-AzVirtualNetwork -AsJob | Out-Null
+                    }
                 } elseif ($nsgNames) {
                         $nsg = Get-AzNetworkSecurityGroup -Name $nsgNames[$subnet_num] -resourceGroup $nsgResourceGroup -ErrorAction SilentlyContinue
                         if ($nsg) {
@@ -55,23 +55,23 @@ function add_Subnet {
                     Add-AzVirtualNetworkSubnetConfig -Name $subnetName -VirtualNetwork $vnet `
                     -AddressPrefix $subnetRanges[$subnet_num] | set-AzVirtualNetwork -AsJob | Out-Null
                 }
-                
+
                 Get-Job | Wait-Job | Out-Null
                 if (Get-Job -State Failed) {
                     Write-Host -Object "| -- Error -- some jobs failed as follows:" -ForegroundColor "Red" ; (Get-Job -State Failed).Error 
                     Get-Job | Remove-Job | Out-Null
                     Write-Host -Object "|" ; break
                 }
-            } else {
-                Write-Host -Object "| SUBNET [ ${subnetName} ] already exists." -ForegroundColor "Yellow" #; break
-            }
             Get-Job | Remove-Job | Out-Null
             Write-Host -Object "| SUBNET ResourceID: "
             $vnet = Get-AzVirtualNetwork -Name $vnetName -ResourceGroup $vnetResourceGroup
             Write-Host "|"(Get-AzVirtualNetworkSubnetConfig -Name $subnetName -VirtualNetwork $vnet).Id
             Write-Host -Object "|" ; $nsg = $null
             $subnet_num ++ ; Start-Sleep 1
+        } else {
+            Write-Host -Object "| SUBNET [ ${subnetName} ] already exists." -ForegroundColor "Yellow" #; break
         }
+    }
         Write-Host -Object "| - - - - -"
     }
     Write-Host -Object "| function add_Subnet completed."
