@@ -77,6 +77,8 @@ function add_VM {
                 $nicSuffix ++
             } while ($nic)
 
+            if(!($location)) {Write-Host -Object "VM NIC is no found.";break}
+
             # Credential setting
             $password = ConvertTo-SecureString -String $adminPassword -AsPlainText -Force
             $Credential = New-Object System.Management.Automation.PSCredential $adminUsername, $password

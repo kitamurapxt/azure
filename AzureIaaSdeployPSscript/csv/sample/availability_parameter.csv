@@ -1,3 +1,3 @@
 AvailabilitySet,vm_resourceGroup,Location,UpdateDomain,FaultDomain,ProximityPlacementGroup
 sample-as01,sample-rg,japaneast,5,2,sample-ppg01
-sample-as02,sample-rg,japaneast,5,2,
+sample-as02,sample-rg,japaneast,3,2,

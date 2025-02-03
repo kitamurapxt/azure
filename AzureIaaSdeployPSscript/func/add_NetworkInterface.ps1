@@ -1,10 +1,9 @@
 function add_NetworkInterface {
-    foreach ($line in $nw_csv) {
+    foreach ($line in $vmnw_csv) {
         $nicPrefix = $line.vm_name
         $vmResourceGroup = $line.vm_resourceGroup
         $vnetName = $line.vNet_name
         $vnetResourceGroup = $line.vNet_resourceGroup
-        $location = $line.location
         $subnetNames = $line.subnetNames.Split(";")
         $privateIpAddresses = $line.ipAddress.Split(";")
         <#
@@ -24,6 +23,12 @@ function add_NetworkInterface {
         $nic_num = 0
         foreach ($IpAddress in $privateIpAddresses) {
             if(!($IpAddress)){ break }
+
+            $vnet = Get-AzVirtualNetwork -Name $vnetName -ResourceGroup $vnetResourceGroup -ErrorAction SilentlyContinue
+            if(!($vnet)){ break }
+
+            $location = $vnet.Location
+
             # Function call. Create resource group if it does not exist.
             add_ResourceGroup $vmResourceGroup $location
 
@@ -35,7 +40,6 @@ function add_NetworkInterface {
                 Write-Host -Object "|"
                 Write-Host -Object "| NIC [ ${nicPrefix}-NIC${nicSuffix} ] deploying..."
                 try {
-                    $vnet = Get-AzVirtualNetwork -Name $vnetName -ResourceGroup $vnetResourceGroup
                     $subnet = Get-AzVirtualNetworkSubnetConfig -Name $subnetNames[$nic_num] -VirtualNetwork $vnet
                 }
                 catch{
