@@ -1,9 +1,9 @@
 function add_vNetPeering {
     foreach ($line in $nw_csv) {
         $vnetName = $line.vNet_name
-        $vnetResourceGroup = $line.vNet_resourceGroup
-        $PeervNetNames = $line.Peer_vNets.Split(";")
-        $PeervNetRgs = $line.Peer_vNetRgs.Split(";")
+        $vnetRg = $line.vNet_resourceGroup
+        $tovNetNames = $line.Peer_vNets.Split(";")
+        $tovNetRgs = $line.Peer_vNetRgs.Split(";")
         <#
             .SYNOPSIS
             Set New vNetPeering.
@@ -18,26 +18,34 @@ function add_vNetPeering {
             NONE. This function is called in deploy_AzVm.ps1
         #>
 
-        if (!($PeervNetNames)) {
+        if (!($tovNetNames)) {
             # do nothing
         } else{
             $vnet_num = 0
-            foreach ($PeervNetName in $PeervNetNames) {
+            foreach ($tovNetName in $tovNetNames) {
                 Write-Host -Object "| Azure_Virtual_Network_Peering [ $vnetName ]"
                 Write-Host -Object "|"
-                $fromvNet = Get-AzVirtualNetwork -Name $vnetName -ResourceGroup $vnetResourceGroup -ErrorAction SilentlyContinue
-                $PeervNet = Get-AzVirtualNetwork -Name $PeervNetName -ResourceGroup $PeervNetRgs[$vnet_num] -ErrorAction SilentlyContinue
+                $fromvNet = Get-AzVirtualNetwork -Name $vnetName -ResourceGroup $vnetRg -ErrorAction SilentlyContinue
+                $tovNet = Get-AzVirtualNetwork -Name $tovNetName -ResourceGroup $tovNetRgs[$vnet_num] -ErrorAction SilentlyContinue
                 if (!($fromvNet)) {
                     Write-Host -Object "| FROMVNET [ ${$fromvNet} ] not found." -ForegroundColor "Yellow" ; break
                 }
-                if (!($PeervNet)) {
-                    Write-Host -Object "| PEERVNET [ ${$PeervNet} ] not found." -ForegroundColor "Yellow" ; break
+                if (!($tovNet)) {
+                    Write-Host -Object "| PEERVNET [ ${$tovNet} ] not found." -ForegroundColor "Yellow" ; break
                 } else {
-                    $PeerName = $vnetName +"---"+ $PeervNetName
-                    if (!(Get-AzVirtualNetworkPeering -VirtualNetworkName $fromvNet.name -ResourceGroupName $vnetResourceGroup -Name $PeerName -ErrorAction SilentlyContinue)) {
+                    # vNet1 --- vNet2
+                    $PeerName = $vnetName +"---"+ $tovNetName
+                    $vNetPeering = Get-AzVirtualNetworkPeering -VirtualNetworkName $fromvNet.name -ResourceGroupName $vnetRg -Name $PeerName -ErrorAction SilentlyContinue
+                    if (!($vNetPeering)) {
                         Write-Host -Object "| PEERING [ ${PeerName} ] deploying... "
-                        Add-AzVirtualNetworkPeering -Name $PeerName -VirtualNetwork $fromvNet -RemoteVirtualNetworkId $PeervNet.Id -AsJob
+                        Add-AzVirtualNetworkPeering -Name $PeerName -VirtualNetwork $fromvNet -RemoteVirtualNetworkId $tovNet.Id -AsJob
                         Get-Job | Wait-Job | Out-Null
+
+                        $vNetPeering = Get-AzVirtualNetworkPeering -VirtualNetworkName $fromvNet.name -ResourceGroupName $vnetRg -Name $PeerName -ErrorAction SilentlyContinue
+                        $vNetPeering.AllowForwardedTraffic = $True
+                        Set-AzVirtualNetworkPeering -VirtualNetworkPeering $vNetPeering -AsJob
+                        Get-Job | Wait-Job | Out-Null
+
                         if (Get-Job -State Failed) {
                             Write-Host -Object "| -- Error -- some jobs failed as follows:" -ForegroundColor "Red" ; (Get-Job -State Failed).Error 
                             Get-Job | Remove-Job | Out-Null
@@ -46,6 +54,29 @@ function add_vNetPeering {
                         Get-Job | Remove-Job | Out-Null
                         Write-Host -Object "| VNET PEERING [ ${PeerName} ] connected."
                         Write-Host -Object "|"
+
+                        # vNet2 --- vNet1
+                        $PeerName = $tovnetName +"---"+ $vNetName
+                        $vNetPeering = Get-AzVirtualNetworkPeering -VirtualNetworkName $tovNetName -ResourceGroupName $tovNetRgs[$vnet_num] -Name $PeerName -ErrorAction SilentlyContinue
+                        if (!($vNetPeering)) {
+                            Write-Host -Object "| PEERING [ ${PeerName} ] deploying... "
+                            Add-AzVirtualNetworkPeering -Name $PeerName -VirtualNetwork $tovNet -RemoteVirtualNetworkId $fromvNet.Id -AsJob
+                            Get-Job | Wait-Job | Out-Null
+    
+                            $vNetPeering = Get-AzVirtualNetworkPeering -VirtualNetworkName $tovNetName -ResourceGroupName $tovNetRgs[$vnet_num] -Name $PeerName -ErrorAction SilentlyContinue
+                            $vNetPeering.AllowForwardedTraffic = $True
+                            Set-AzVirtualNetworkPeering -VirtualNetworkPeering $vNetPeering -AsJob    
+                            Get-Job | Wait-Job | Out-Null
+                            
+                            if (Get-Job -State Failed) {
+                                Write-Host -Object "| -- Error -- some jobs failed as follows:" -ForegroundColor "Red" ; (Get-Job -State Failed).Error 
+                                Get-Job | Remove-Job | Out-Null
+                                Write-Host -Object "|" ; break
+                            }
+                            Get-Job | Remove-Job | Out-Null
+                            Write-Host -Object "| VNET PEERING [ ${PeerName} ] connected."
+                            Write-Host -Object "|"
+                        }
                     } else {
                         Write-Host -Object "| VNET PEERING [ ${PeerName} ] already exists." -ForegroundColor "Yellow"
                     }
@@ -58,4 +89,5 @@ function add_vNetPeering {
     Write-Host -Object "| function add_vNetPeering completed."
     Write-Host -Object "|"
 }
+
 
